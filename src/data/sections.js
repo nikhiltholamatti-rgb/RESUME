@@ -1,0 +1,202 @@
+export const SECTIONS = [
+  // Mandatory sections (always on)
+  {
+    id: "personal",
+    label: "Personal & Contact",
+    mandatory: true,
+    icon: "User",
+    description: "Full name, contact info, professional links, and optional photo.",
+    emptyEntry: {
+      fullName: "",
+      headline: "",
+      email: "",
+      phone: "",
+      city: "",
+    },
+  },
+  {
+    id: "summary",
+    label: "Professional Summary",
+    mandatory: true,
+    icon: "FileText",
+    description: "Punchy 2-4 sentence overview of your career impact and strengths.",
+    emptyEntry: "",
+  },
+  {
+    id: "skills",
+    label: "Technical Skills",
+    mandatory: true,
+    icon: "Code2",
+    description: "Languages, web frameworks, databases, and engineering tools.",
+    emptyEntry: {
+      languages: [],
+      web: [],
+      databases: [],
+      tools: [],
+    },
+  },
+  {
+    id: "experience",
+    label: "Work Experience & Internships",
+    mandatory: true,
+    icon: "Briefcase",
+    description: "Professional history, responsibilities, and quantified impact.",
+    emptyEntry: {
+      company: "",
+      role: "",
+      duration: "",
+      bullets: [""],
+    },
+  },
+  {
+    id: "projects",
+    label: "Projects",
+    mandatory: true,
+    icon: "FolderGit2",
+    description: "Featured apps, platforms, tech stacks, and live/repo links.",
+    emptyEntry: {
+      name: "",
+      techStack: "",
+      liveLink: "",
+      githubLink: "",
+      bullets: [""],
+    },
+  },
+  {
+    id: "education",
+    label: "Education",
+    mandatory: true,
+    icon: "GraduationCap",
+    description: "Degrees, institutions, majors, graduation years, and CGPA.",
+    emptyEntry: {
+      college: "",
+      degree: "",
+      branch: "",
+      startYear: "",
+      endYear: "",
+      cgpa: "",
+    },
+  },
+
+  // Optional sections (toggle via drawer)
+  {
+    id: "certifications",
+    label: "Certifications",
+    mandatory: false,
+    icon: "Award",
+    description: "Industry credentials, cloud certifications, and licenses.",
+    emptyEntry: {
+      name: "",
+      issuer: "",
+      issueDate: "",
+      url: "",
+    },
+  },
+  {
+    id: "leadership",
+    label: "Leadership & Volunteering",
+    mandatory: false,
+    icon: "Users",
+    description: "Club leadership, student advocacy, hackathon organizer, or volunteer work.",
+    emptyEntry: {
+      organization: "",
+      role: "",
+      duration: "",
+      bullets: [""],
+    },
+  },
+  {
+    id: "achievements",
+    label: "Achievements & Awards",
+    mandatory: false,
+    icon: "Trophy",
+    description: "Honors, hackathon placements, scholarships, and special recognitions.",
+    emptyEntry: {
+      text: "",
+    },
+  },
+  {
+    id: "opensource",
+    label: "Open Source",
+    mandatory: false,
+    icon: "GitPullRequest",
+    description: "GitHub contributions, OSS libraries maintained, and bug fixes.",
+    emptyEntry: {
+      projectName: "",
+      role: "Contributor",
+      link: "",
+      description: "",
+    },
+  },
+  {
+    id: "publications",
+    label: "Publications",
+    mandatory: false,
+    icon: "BookOpen",
+    description: "Conference papers, journal publications, patents, or whitepapers.",
+    emptyEntry: {
+      title: "",
+      venue: "",
+      date: "",
+      link: "",
+    },
+  },
+  {
+    id: "languages",
+    label: "Languages",
+    mandatory: false,
+    icon: "Languages",
+    description: "Natural languages and your level of spoken/written proficiency.",
+    emptyEntry: {
+      language: "",
+      proficiency: "Fluent",
+    },
+  },
+  {
+    id: "interests",
+    label: "Interests",
+    mandatory: false,
+    icon: "Heart",
+    description: "Personal passions, hobbies, sports, and creative interests.",
+    emptyEntry: {
+      name: "",
+    },
+  },
+  {
+    id: "custom",
+    label: "Custom Section",
+    mandatory: false,
+    icon: "Sparkles",
+    description: "A customizable section with your own title and key points.",
+    emptyEntry: {
+      heading: "Additional Information",
+      bullets: [""],
+    },
+  },
+  {
+    id: "coursework",
+    label: "Relevant Coursework",
+    mandatory: false,
+    icon: "BookMarked",
+    description: "Academic courses and specialized electives relevant to your role.",
+    emptyEntry: {
+      course: "",
+    },
+  },
+  {
+    id: "testScores",
+    label: "Test Scores & Exams",
+    mandatory: false,
+    icon: "CheckCircle2",
+    description: "Standardized scores (GRE, SAT, GATE, TOEFL, IELTS, CAT, etc.).",
+    emptyEntry: {
+      examName: "",
+      score: "",
+      date: "",
+      percentile: "",
+    },
+  },
+];
+
+export const MANDATORY_SECTION_IDS = SECTIONS.filter((s) => s.mandatory).map((s) => s.id);
+export const OPTIONAL_SECTIONS = SECTIONS.filter((s) => !s.mandatory);
