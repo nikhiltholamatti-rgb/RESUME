@@ -14,14 +14,20 @@ import ValidationModal from "./components/ValidationModal";
 import { validateMandatoryResume } from "./utils/validation";
 import { saveResumeToCloud } from "./utils/resumeStorage";
 import { SECTIONS } from "./data/sections";
-import { Cloud, CloudUpload, FolderKanban, LogIn, LogOut, CheckCircle } from "lucide-react";
+import Feedback from "./components/Feedback";
+import MobileTabBar from "./components/MobileTabBar";
+import MobileTemplatesPanel from "./components/MobileTemplatesPanel";
+import DesignSettings from "./components/DesignSettings";
+import StylePanel from "./components/StylePanel";
+import MobilePreview from "./components/MobilePreview";
+import { Cloud, CloudUpload, FolderKanban, LogIn, LogOut, CheckCircle, MessageSquareQuote } from "lucide-react";
 
 export default function App() {
   const { state, dispatch, ACTIONS } = useResume();
   const { user, signOut } = useAuth();
   const location = useLocation();
 
-  const [mobileTab, setMobileTab] = useState("form"); // "form" | "templates"
+  const [mobileTab, setMobileTab] = useState("edit"); // "edit" | "templates" | "design" | "preview"
   const [burstActive, setBurstActive] = useState(false);
   const [burstCoords, setBurstCoords] = useState({ x: 0, y: 0 });
   const [validationErrors, setValidationErrors] = useState([]);
@@ -66,7 +72,9 @@ export default function App() {
   // Determine current wizard step index (0: details, 1: template, 2: build & export)
   const currentWizardStep = state.isBuilt
     ? 2
-    : mobileTab === "templates"
+    : mobileTab === "preview"
+    ? 2
+    : mobileTab === "templates" || mobileTab === "design"
     ? 1
     : 0;
 
@@ -93,7 +101,7 @@ export default function App() {
     if (secIdx !== -1) {
       dispatch({ type: ACTIONS.SET_FORM_STEP, payload: secIdx });
     }
-    setMobileTab("form");
+    setMobileTab("edit");
     if (state.isBuilt) {
       dispatch({ type: ACTIONS.SET_BUILT, payload: false });
       dispatch({ type: ACTIONS.SET_WIZARD_STEP, payload: 0 });
@@ -141,7 +149,9 @@ export default function App() {
 
   const handleStepClick = (stepId) => {
     if (stepId === 2) {
-      handleBuildClick();
+      if (!state.isBuilt) {
+        setMobileTab("preview");
+      }
     } else if (stepId === 1) {
       if (state.isBuilt) {
         handleEditAgain();
@@ -151,8 +161,20 @@ export default function App() {
       if (state.isBuilt) {
         handleEditAgain();
       }
-      setMobileTab("form");
+      setMobileTab("edit");
     }
+  };
+
+  const handleScrollToFeedback = () => {
+    if (state.isBuilt) {
+      handleEditAgain();
+    }
+    setTimeout(() => {
+      const el = document.getElementById("feedback");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 120);
   };
 
   return (
@@ -202,7 +224,16 @@ export default function App() {
           </div>
 
           {/* Quick status badge & Auth Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-wrap justify-end">
+            <button
+              type="button"
+              onClick={handleScrollToFeedback}
+              className="btn btn-outline btn-sm !py-1.5 !px-3 text-xs flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-white cursor-pointer"
+              title="Jump to Feedback section"
+            >
+              <MessageSquareQuote size={13} className="text-[var(--accent-light)]" />
+              <span>Feedback</span>
+            </button>
             {user ? (
               <div className="flex items-center gap-2.5">
                 {/* Cloud sync indicator */}
@@ -310,52 +341,89 @@ export default function App() {
           />
         ) : (
           /* Editor & Gallery View */
-          <div className="flex-1 flex flex-col gap-6">
-            {/* Mobile Tab Switcher */}
-            <div className="flex lg:hidden rounded-[var(--radius-xs)] bg-[var(--bg-glass-strong)] p-1 border border-[var(--border-glass)]">
-              <button
-                type="button"
-                className={`flex-1 py-2 text-xs font-semibold rounded-[var(--radius-xs)] transition-all ${
-                  mobileTab === "form"
-                    ? "bg-[var(--accent)] text-white shadow-md"
-                    : "text-[var(--text-secondary)] hover:text-white"
-                }`}
-                onClick={() => setMobileTab("form")}
-              >
-                📝 1. Enter Information
-              </button>
-              <button
-                type="button"
-                className={`flex-1 py-2 text-xs font-semibold rounded-[var(--radius-xs)] transition-all ${
-                  mobileTab === "templates"
-                    ? "bg-[var(--accent)] text-white shadow-md"
-                    : "text-[var(--text-secondary)] hover:text-white"
-                }`}
-                onClick={() => setMobileTab("templates")}
-              >
-                🎨 2. Choose Template
-              </button>
-            </div>
-
-            {/* Desktop Side-by-Side (50% / 50%) or Mobile Tab View */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div className="flex-1 flex flex-col gap-6 pb-28 lg:pb-0">
+            {/* Desktop Side-by-Side (50% / 50%) (Visible on lg and above) */}
+            <div className="hidden lg:grid lg:grid-cols-12 gap-6 items-start">
               {/* Left Panel: Guided Form */}
-              <div
-                className={`lg:col-span-5 h-[calc(100vh-140px)] min-h-[600px] ${
-                  mobileTab === "form" ? "block" : "hidden lg:block"
-                }`}
-              >
-                <FormPanel onCompleteForm={() => setMobileTab("templates")} />
+              <div className="lg:col-span-5 h-[calc(100vh-140px)] min-h-[600px]">
+                <FormPanel onCompleteForm={() => {}} />
               </div>
 
               {/* Right Panel: Template Gallery */}
-              <div
-                className={`lg:col-span-7 h-[calc(100vh-140px)] min-h-[600px] ${
-                  mobileTab === "templates" ? "block" : "hidden lg:block"
-                }`}
-              >
+              <div className="lg:col-span-7 h-[calc(100vh-140px)] min-h-[600px]">
                 <TemplateGallery />
               </div>
+            </div>
+
+            {/* Mobile Layout: Single column with active tab (Visible below lg) */}
+            <div className="block lg:hidden w-full">
+              {/* 1. Edit Tab: Resume Content Forms */}
+              {mobileTab === "edit" && (
+                <div className="w-full">
+                  <FormPanel onCompleteForm={() => setMobileTab("templates")} />
+                </div>
+              )}
+
+              {/* 2. Templates Tab: 2-col grid (1-col below 360px) in a scrollable panel */}
+              {mobileTab === "templates" && (
+                <div className="w-full glass rounded-[var(--radius)] border border-[var(--border-glass)] p-4 sm:p-5 shadow-2xl">
+                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-glass)]">
+                    <div>
+                      <h2 className="text-base sm:text-lg font-bold text-white">
+                        Choose a Template
+                      </h2>
+                      <p className="text-xs text-[var(--text-muted)]">
+                        Tap any layout to select your ATS style
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setMobileTab("preview")}
+                      className="btn btn-outline btn-sm !py-2 !px-3.5 text-xs flex items-center gap-1.5 text-[var(--accent-light)] hover:text-white cursor-pointer"
+                    >
+                      <span>Preview</span>
+                      <span>→</span>
+                    </button>
+                  </div>
+                  <div className="overflow-y-auto max-h-[70vh] pb-[calc(env(safe-area-inset-bottom)+5.5rem)] px-0.5">
+                    <MobileTemplatesPanel onSelectTemplate={() => {}} />
+                  </div>
+                </div>
+              )}
+
+              {/* 3. Design Tab: Palette, fonts, font size, spacing */}
+              {mobileTab === "design" && (
+                <div className="w-full glass rounded-[var(--radius)] border border-[var(--border-glass)] p-4 sm:p-5 shadow-2xl">
+                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border-glass)]">
+                    <div>
+                      <h2 className="text-base sm:text-lg font-bold text-white">
+                        Design & Styling
+                      </h2>
+                      <p className="text-xs text-[var(--text-muted)]">
+                        Palette, typography, scale & spacing
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setMobileTab("preview")}
+                      className="btn btn-outline btn-sm !py-2 !px-3.5 text-xs flex items-center gap-1.5 text-[var(--accent-light)] hover:text-white cursor-pointer"
+                    >
+                      <span>Preview</span>
+                      <span>→</span>
+                    </button>
+                  </div>
+                  <div className="overflow-y-auto max-h-[70vh] pb-[calc(env(safe-area-inset-bottom)+5.5rem)] px-0.5">
+                    <StylePanel />
+                  </div>
+                </div>
+              )}
+
+              {/* 4. Preview Tab: Live resume scaled with no horizontal scroll and Download button */}
+              {mobileTab === "preview" && (
+                <div className="w-full pb-[calc(env(safe-area-inset-bottom)+5rem)]">
+                  <MobilePreview onDownload={handleBuildClick} />
+                </div>
+              )}
             </div>
 
             {/* Bottom Action Bar with Big Build Resume Button */}
@@ -377,7 +445,7 @@ export default function App() {
               <div ref={buildBtnRef}>
                 <MagneticButton
                   type="button"
-                  className="btn-build flex items-center gap-3"
+                  className="btn-build flex items-center gap-3 min-h-[48px]"
                   onClick={handleBuildClick}
                   disabled={state.isBuilding}
                 >
@@ -389,9 +457,29 @@ export default function App() {
                 </MagneticButton>
               </div>
             </motion.div>
+
+            {/* Public Feedback Section */}
+            <Feedback id="feedback" />
+
+            {/* Landing Page Footer */}
+            <footer className="mt-16 pt-8 pb-4 border-t border-[var(--border-glass)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--text-muted)]">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-white tracking-tight">ResumeForge</span>
+                <span>• ATS-Optimized Interactive Resume Engine</span>
+              </div>
+              <p>© {new Date().getFullYear()} ResumeForge. Built for creators & job seekers.</p>
+            </footer>
           </div>
         )}
       </div>
+
+      {/* Sticky Mobile Bottom Tab Bar (Fixed at bottom on screens below lg) */}
+      {!state.isBuilt && (
+        <MobileTabBar
+          activeTab={mobileTab}
+          onTabChange={(tab) => setMobileTab(tab)}
+        />
+      )}
     </div>
   );
 }

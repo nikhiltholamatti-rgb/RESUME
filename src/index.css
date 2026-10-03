@@ -401,7 +401,7 @@ select.form-input {
 @media (max-width: 900px) {
   .template-grid { grid-template-columns: repeat(2, 1fr); }
 }
-@media (max-width: 540px) {
+@media (max-width: 359px) {
   .template-grid { grid-template-columns: 1fr; }
 }
 
@@ -978,11 +978,27 @@ select.form-input {
 .tpl-tech .tk-summary { font-size: 9.5pt; color: #333; line-height: 1.5; }
 
 /* ================================
-   MOBILE
+   MOBILE & TOUCH FRIENDLY
    ================================ */
+@media (max-width: 1023px) {
+  /* Prevent iOS Safari auto-zoom on input focus */
+  .form-input,
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  input[type="password"],
+  textarea,
+  select.form-input,
+  select {
+    font-size: 16px !important;
+  }
+}
+
 @media (max-width: 640px) {
-  .app-content { padding: 12px 12px 32px; }
-  .progress-connector { width: 24px; margin: 0 6px; }
+  .app-content { padding: 12px 10px 32px; }
+  .progress-connector { width: 18px; margin: 0 4px; }
   .progress-label { display: none; }
   .step-card { padding: 16px 12px; }
   .step-title { font-size: 1.15rem; }
@@ -1011,3 +1027,43 @@ select.form-input {
   }
   @page { size: A4; margin: 0; }
 }
+
+/* ================================
+   RESUME LIVE & PRINT STYLING SCOPE
+   ================================ */
+.resume-font-scope {
+  font-family: var(--font-family, inherit);
+  font-size: var(--font-size, 100%);
+  line-height: var(--spacing, 1.5);
+}
+
+.resume-font-scope a {
+  color: var(--accent);
+}
+
+.resume-font-scope svg {
+  color: var(--accent);
+}
+
+/* ================================
+   PAGE BREAK & SECTION SPACING CONTROLS
+   ================================ */
+.resume-tpl section {
+  break-inside: auto !important;
+  page-break-inside: auto !important;
+}
+
+[data-block-type="heading"],
+.resume-tpl h2,
+.resume-tpl h3,
+.rc-section-title {
+  break-after: avoid !important;
+  page-break-after: avoid !important;
+}
+
+[data-block-type="item"],
+.resume-tpl li {
+  break-inside: avoid !important;
+  page-break-inside: avoid !important;
+}
+

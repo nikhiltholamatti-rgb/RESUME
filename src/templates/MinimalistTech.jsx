@@ -21,6 +21,10 @@ export default function MinimalistTech({
   const { personalInfo = {}, links = [], summary, education = [], skills = {}, projects = [], experience = [] } = data;
   const activeOptional = data.activeOptional || [];
 
+  const headingTransform = data?.style?.headingStyle === "normal" ? "none" : "uppercase";
+  const showDividers = data?.style?.showDividers !== false;
+  const dividerLineBg = showDividers ? (accentColor + "55") : "transparent";
+
   return (
     <div
       className="resume-tpl tpl-tech"
@@ -42,7 +46,7 @@ export default function MinimalistTech({
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span style={{ fontFamily: "monospace", color: accentColor, fontWeight: 700, fontSize: "14pt" }}>&gt;</span>
-                <h1 style={{ fontSize: "20pt", fontWeight: 800, margin: 0, letterSpacing: "-0.5px" }}>
+                <h1 style={{ fontSize: "20pt", fontWeight: 800, margin: 0, letterSpacing: "-0.5px", color: accentColor, textTransform: headingTransform }}>
                   {personalInfo.fullName || "alex.dev"}
                 </h1>
               </div>
@@ -57,13 +61,15 @@ export default function MinimalistTech({
             </div>
           </div>
 
-          <div style={{ marginTop: "10px", paddingTop: "8px", borderTop: "1px dashed #cbd5e1" }}>
+          <div style={{ marginTop: "10px", paddingTop: "8px", borderTop: showDividers ? "1px dashed #cbd5e1" : "none" }}>
             <ContactLine
               personalInfo={personalInfo}
               links={links}
               separator=" // "
               className="resume-contact-row text-[8.5pt]"
               textColor="#475569"
+              iconColor={accentColor}
+              linkColor={accentColor}
               iconSize={13}
             />
           </div>
@@ -75,9 +81,8 @@ export default function MinimalistTech({
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: isLightContent ? "22px" : "16px",
-          flexGrow: isLightContent ? 1 : "initial",
-          justifyContent: isLightContent ? "space-between" : "flex-start",
+          gap: "20px",
+          justifyContent: "flex-start",
         }}
       >
         {/* Summary */}
@@ -86,7 +91,7 @@ export default function MinimalistTech({
             <ResumeBlock id="sec-summary-head" type="heading" headingFor="summary" pageBlocks={pageBlocks}>
               <h2 style={{ fontSize: "9.5pt", fontFamily: "monospace", fontWeight: 700, color: accentColor, marginBottom: "4px", display: "flex", alignItems: "center", gap: "6px" }}>
                 <span>$ cat summary.md</span>
-                <span style={{ height: "1px", flexGrow: 1, background: "#e2e8f0" }} />
+                <span style={{ height: "1px", flexGrow: 1, background: dividerLineBg }} />
               </h2>
             </ResumeBlock>
             <ResumeBlock id="sec-summary-body" type="item" pageBlocks={pageBlocks}>
@@ -103,7 +108,7 @@ export default function MinimalistTech({
             <ResumeBlock id="sec-skills-head" type="heading" headingFor="skills" pageBlocks={pageBlocks}>
               <h2 style={{ fontSize: "9.5pt", fontFamily: "monospace", fontWeight: 700, color: accentColor, marginBottom: "6px", display: "flex", alignItems: "center", gap: "6px" }}>
                 <span>$ stack --inspect</span>
-                <span style={{ height: "1px", flexGrow: 1, background: "#e2e8f0" }} />
+                <span style={{ height: "1px", flexGrow: 1, background: dividerLineBg }} />
               </h2>
             </ResumeBlock>
             <ResumeBlock id="sec-skills-body" type="item" pageBlocks={pageBlocks}>
@@ -159,7 +164,7 @@ export default function MinimalistTech({
             <ResumeBlock id="sec-experience-head" type="heading" headingFor="experience" pageBlocks={pageBlocks}>
               <h2 style={{ fontSize: "9.5pt", fontFamily: "monospace", fontWeight: 700, color: accentColor, marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
                 <span>$ git log --experience</span>
-                <span style={{ height: "1px", flexGrow: 1, background: "#e2e8f0" }} />
+                <span style={{ height: "1px", flexGrow: 1, background: dividerLineBg }} />
               </h2>
             </ResumeBlock>
             {experience.map((exp, idx) => (
@@ -189,7 +194,7 @@ export default function MinimalistTech({
             <ResumeBlock id="sec-projects-head" type="heading" headingFor="projects" pageBlocks={pageBlocks}>
               <h2 style={{ fontSize: "9.5pt", fontFamily: "monospace", fontWeight: 700, color: accentColor, marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
                 <span>$ ls ./repositories</span>
-                <span style={{ height: "1px", flexGrow: 1, background: "#e2e8f0" }} />
+                <span style={{ height: "1px", flexGrow: 1, background: dividerLineBg }} />
               </h2>
             </ResumeBlock>
             {projects.map((proj, idx) => (

@@ -4,6 +4,8 @@ import { TEMPLATES } from "./templates/templateData";
 import TemplateRenderer from "./templates/TemplateRenderer";
 import TiltCard from "./TiltCard";
 import FontSelector from "./FontSelector";
+import StylePanel from "./StylePanel";
+import { Check } from "lucide-react";
 
 const ACCENT_SWATCHES = [
   { name: "Electric Indigo", hex: "#6366f1" },
@@ -44,7 +46,7 @@ function MiniPreview({ templateId, data, accentColor }) {
         <TemplateRenderer
           templateId={templateId}
           data={data}
-          accentColor={templateId === "classic" ? "#111111" : accentColor}
+          accentColor={accentColor}
         />
       </div>
     </div>
@@ -138,6 +140,9 @@ export default function TemplateGallery() {
     testScores: state.testScores || [],
     activeOptional: state.activeOptional || [],
     fontFamily: state.fontFamily,
+    fontSize: state.fontSize,
+    spacing: state.spacing,
+    style: state.style,
     photo: state.photo,
     showPhoto: state.showPhoto,
     photoShape: state.photoShape || "circle",
@@ -149,18 +154,46 @@ export default function TemplateGallery() {
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-[var(--border-glass)]">
         <div>
           <h2 className="text-lg font-bold text-white">
-            Choose a Template
+            Choose a Template & Style
           </h2>
           <p className="text-xs text-[var(--text-muted)] mt-0.5">
-            Real-time live mini-previews of your data.
+            Select your layout and customize typography, accent color, and spacing below.
           </p>
         </div>
 
-        {/* Toolbar: Font Selector & Accent Color */}
+        {/* Toolbar: Font Selector, Font Size, Spacing & Accent Color */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Font Selector */}
           <div className="bg-[var(--bg-glass-strong)] p-1.5 px-2 rounded-[var(--radius-xs)] border border-[var(--border-glass)]">
             <FontSelector />
+          </div>
+
+          {/* Font Size Selector */}
+          <div className="flex items-center gap-1.5 bg-[var(--bg-glass-strong)] p-1.5 px-2 rounded-[var(--radius-xs)] border border-[var(--border-glass)]">
+            <span className="text-xs font-semibold text-[var(--text-secondary)]">Size:</span>
+            <select
+              value={state.fontSize || "medium"}
+              onChange={(e) => dispatch({ type: ACTIONS.SET_FONT_SIZE, payload: e.target.value })}
+              className="bg-transparent text-xs text-[var(--text-primary)] outline-none cursor-pointer"
+            >
+              <option value="small" className="bg-[#0f1026] text-white">Compact</option>
+              <option value="medium" className="bg-[#0f1026] text-white">Medium</option>
+              <option value="large" className="bg-[#0f1026] text-white">Spacious</option>
+            </select>
+          </div>
+
+          {/* Spacing Selector */}
+          <div className="flex items-center gap-1.5 bg-[var(--bg-glass-strong)] p-1.5 px-2 rounded-[var(--radius-xs)] border border-[var(--border-glass)]">
+            <span className="text-xs font-semibold text-[var(--text-secondary)]">Spacing:</span>
+            <select
+              value={state.spacing || "normal"}
+              onChange={(e) => dispatch({ type: ACTIONS.SET_SPACING, payload: e.target.value })}
+              className="bg-transparent text-xs text-[var(--text-primary)] outline-none cursor-pointer"
+            >
+              <option value="compact" className="bg-[#0f1026] text-white">Tight</option>
+              <option value="normal" className="bg-[#0f1026] text-white">Normal</option>
+              <option value="relaxed" className="bg-[#0f1026] text-white">Relaxed</option>
+            </select>
           </div>
 
           {/* Accent Color Picker */}
@@ -220,9 +253,10 @@ export default function TemplateGallery() {
                   : undefined,
               }}
             >
-              {/* Selected Glow Badge */}
+              {/* Selected Glow Badge with Check Icon */}
               {isSelected && (
                 <div
+                  className="flex items-center gap-1"
                   style={{
                     position: "absolute",
                     top: "10px",
@@ -239,7 +273,8 @@ export default function TemplateGallery() {
                     textTransform: "uppercase",
                   }}
                 >
-                  Active
+                  <Check size={12} strokeWidth={3} />
+                  <span>Active</span>
                 </div>
               )}
 
@@ -263,6 +298,19 @@ export default function TemplateGallery() {
             </TiltCard>
           );
         })}
+      </div>
+
+      {/* Style & Typography Panel */}
+      <div className="mt-8 pt-6 border-t border-[var(--border-glass)]">
+        <div className="mb-4">
+          <h3 className="text-base font-bold text-white flex items-center gap-2">
+            <span>Style & Customization</span>
+          </h3>
+          <p className="text-xs text-[var(--text-muted)] mt-0.5">
+            Personalize accent palette, typography, scale, line spacing, and section dividers.
+          </p>
+        </div>
+        <StylePanel />
       </div>
     </div>
   );

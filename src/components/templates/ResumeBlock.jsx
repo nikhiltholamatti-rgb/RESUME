@@ -13,6 +13,8 @@ export function ResumeBlock({
     return null;
   }
 
+  const isHeading = type === "heading";
+
   return (
     <div
       data-page-block="true"
@@ -23,6 +25,12 @@ export function ResumeBlock({
       style={{
         breakInside: "avoid",
         pageBreakInside: "avoid",
+        ...(isHeading
+          ? {
+              breakAfter: "avoid",
+              pageBreakAfter: "avoid",
+            }
+          : {}),
         ...style,
       }}
     >

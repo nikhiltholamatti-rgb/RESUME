@@ -20,7 +20,12 @@ export default function FinalResumeView({ onEditAgain, onValidationFailed }) {
 
   const printRef = useRef(null);
   const measurerRef = useRef(null);
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 850) {
+      return Math.min(1, Math.max(0.36, (window.innerWidth - 24) / 794));
+    }
+    return 1;
+  });
   const [isPrinting, setIsPrinting] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
@@ -358,7 +363,7 @@ export default function FinalResumeView({ onEditAgain, onValidationFailed }) {
       </motion.div>
 
       {/* Stacked Pages Wrapper with Live Zoom Scaling */}
-      <div className="resume-page-wrapper flex justify-center w-full pb-16">
+      <div className="resume-page-wrapper flex justify-center w-full pb-16 overflow-x-hidden">
         <motion.div
           initial={{ rotateY: 90, rotateX: 10, scale: 0.75, opacity: 0 }}
           animate={{ rotateY: 0, rotateX: 0, scale: zoom, opacity: 1 }}

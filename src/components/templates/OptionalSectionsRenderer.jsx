@@ -47,14 +47,13 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
           data-page-block="true"
           data-block-id={blockId}
           data-block-type="item"
-          style={{ breakInside: "avoid" }}
         >
-          <h2 className={headingClass} style={{ color: accentColor }}>Certifications & Licenses</h2>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Certifications & Licenses</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             {items
               .filter((c) => c.name && c.name.trim())
               .map((c) => (
-                <div key={c.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", breakInside: "avoid" }}>
+                <div key={c.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", breakInside: "avoid", pageBreakInside: "avoid" }}>
                   <div>
                     <span className={entryTitleClass} style={{ fontWeight: 600 }}>{c.name}</span>
                     {c.issuer && <span style={{ color: "#64748b", marginLeft: "6px" }}> — {c.issuer}</span>}
@@ -74,11 +73,11 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
     case "leadership":
       return (
         <section>
-          <h2 className={headingClass} style={{ color: accentColor }}>Leadership & Volunteering</h2>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Leadership & Volunteering</h2>
           {items
             .filter((l) => (l.organization && l.organization.trim()) || (l.role && l.role.trim()))
             .map((l) => (
-              <div key={l.id} style={{ marginBottom: "10px", breakInside: "avoid" }}>
+              <div key={l.id} style={{ marginBottom: "10px", breakInside: "avoid", pageBreakInside: "avoid" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                   <div>
                     <span className={entryTitleClass} style={{ fontWeight: 600 }}>{l.role}</span>
@@ -100,13 +99,13 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
 
     case "achievements":
       return (
-        <section style={{ breakInside: "avoid" }}>
-          <h2 className={headingClass} style={{ color: accentColor }}>Achievements & Awards</h2>
+        <section>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Achievements & Awards</h2>
           <ul>
             {items
               .filter((a) => a.text && a.text.trim())
               .map((a) => (
-                <li key={a.id} style={{ marginBottom: "2px" }}>{a.text}</li>
+                <li key={a.id} style={{ marginBottom: "2px", breakInside: "avoid", pageBreakInside: "avoid" }}>{a.text}</li>
               ))}
           </ul>
         </section>
@@ -115,11 +114,11 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
     case "opensource":
       return (
         <section>
-          <h2 className={headingClass} style={{ color: accentColor }}>Open Source Contributions</h2>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Open Source Contributions</h2>
           {items
             .filter((o) => o.projectName && o.projectName.trim())
             .map((o) => (
-              <div key={o.id} style={{ marginBottom: "8px", breakInside: "avoid" }}>
+              <div key={o.id} style={{ marginBottom: "8px", breakInside: "avoid", pageBreakInside: "avoid" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                   <div>
                     <span className={entryTitleClass} style={{ fontWeight: 600 }}>{o.projectName}</span>
@@ -139,12 +138,12 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
 
     case "publications":
       return (
-        <section style={{ breakInside: "avoid" }}>
-          <h2 className={headingClass} style={{ color: accentColor }}>Publications</h2>
+        <section>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Publications</h2>
           {items
             .filter((p) => p.title && p.title.trim())
             .map((p) => (
-              <div key={p.id} style={{ marginBottom: "6px", breakInside: "avoid" }}>
+              <div key={p.id} style={{ marginBottom: "6px", breakInside: "avoid", pageBreakInside: "avoid" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                   <div>
                     <span className={entryTitleClass} style={{ fontWeight: 600 }}>{p.title}</span>
@@ -164,13 +163,13 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
 
     case "languages":
       return (
-        <section style={{ breakInside: "avoid" }}>
-          <h2 className={headingClass} style={{ color: accentColor }}>Languages</h2>
+        <section>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Languages</h2>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 18px" }}>
             {items
               .filter((l) => l.language && l.language.trim())
               .map((l) => (
-                <div key={l.id} style={{ fontSize: "9pt" }}>
+                <div key={l.id} style={{ fontSize: "9pt", breakInside: "avoid", pageBreakInside: "avoid" }}>
                   <strong>{l.language}</strong>
                   {l.proficiency && <span style={{ color: "#64748b", marginLeft: "4px" }}>({l.proficiency})</span>}
                 </div>
@@ -181,9 +180,9 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
 
     case "interests":
       return (
-        <section style={{ breakInside: "avoid" }}>
-          <h2 className={headingClass} style={{ color: accentColor }}>Interests & Hobbies</h2>
-          <p style={{ fontSize: "9.5pt", color: "#333" }}>
+        <section>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Interests & Hobbies</h2>
+          <p style={{ fontSize: "9.5pt", color: "#333", breakInside: "avoid", pageBreakInside: "avoid" }}>
             {items.filter((it) => it.name && it.name.trim()).map((it) => it.name).join(" · ")}
           </p>
         </section>
@@ -193,12 +192,12 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
       return (
         <div>
           {items.map((cust) => (
-            <section key={cust.id} style={{ breakInside: "avoid", marginBottom: "12px" }}>
-              <h2 className={headingClass} style={{ color: accentColor }}>{cust.heading || "Additional Information"}</h2>
+            <section key={cust.id} style={{ marginBottom: "12px" }}>
+              <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>{cust.heading || "Additional Information"}</h2>
               {cust.bullets && cust.bullets.filter((b) => b && b.trim()).length > 0 && (
                 <ul>
                   {cust.bullets.filter((b) => b && b.trim()).map((b, i) => (
-                    <li key={i}>{b}</li>
+                    <li key={i} style={{ breakInside: "avoid", pageBreakInside: "avoid" }}>{b}</li>
                   ))}
                 </ul>
               )}
@@ -209,9 +208,9 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
 
     case "coursework":
       return (
-        <section style={{ breakInside: "avoid" }}>
-          <h2 className={headingClass} style={{ color: accentColor }}>Relevant Coursework</h2>
-          <p style={{ fontSize: "9.5pt", color: "#333" }}>
+        <section>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Relevant Coursework</h2>
+          <p style={{ fontSize: "9.5pt", color: "#333", breakInside: "avoid", pageBreakInside: "avoid" }}>
             {items.filter((it) => it.course && it.course.trim()).map((it) => it.course).join(" · ")}
           </p>
         </section>
@@ -219,13 +218,13 @@ export function RenderOptionalSection({ sectionId, data, accentColor = "#6366f1"
 
     case "testScores":
       return (
-        <section style={{ breakInside: "avoid" }}>
-          <h2 className={headingClass} style={{ color: accentColor }}>Test Scores & Exams</h2>
+        <section>
+          <h2 className={headingClass} style={{ color: accentColor, breakAfter: "avoid", pageBreakAfter: "avoid" }}>Test Scores & Exams</h2>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "12px 24px" }}>
             {items
               .filter((t) => t.examName && t.examName.trim())
               .map((t) => (
-                <div key={t.id} style={{ fontSize: "9pt" }}>
+                <div key={t.id} style={{ fontSize: "9pt", breakInside: "avoid", pageBreakInside: "avoid" }}>
                   <strong>{t.examName}</strong>: {t.score}
                   {t.percentile && <span style={{ color: "#64748b", marginLeft: "4px" }}>({t.percentile})</span>}
                   {t.date && <span style={{ color: "#64748b", marginLeft: "6px" }}> · {t.date}</span>}

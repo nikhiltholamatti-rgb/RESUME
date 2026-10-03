@@ -61,6 +61,19 @@ const defaultState = {
   selectedTemplate: "classic",
   accentColor: "#6366f1",
   pageSize: "a4", // "a4" | "letter"
+  fontSize: "medium", // "small" | "medium" | "large"
+  spacing: "normal", // "compact" | "normal" | "relaxed"
+
+  // Unified Style State
+  style: {
+    accentColor: "#6366f1",
+    fontFamily: DEFAULT_FONT,
+    fontSize: "medium", // "small" | "medium" | "large"
+    spacing: "normal", // "compact" | "normal" | "relaxed"
+    headingStyle: "uppercase", // "uppercase" | "normal"
+    showDividers: true,
+    userChangedColor: false,
+  },
 
   isBuilding: false,
   isBuilt: false,
@@ -69,7 +82,13 @@ const defaultState = {
 const A = {
   SET_WIZARD_STEP: "SET_WIZARD_STEP",
   SET_FORM_STEP: "SET_FORM_STEP",
+  SET_STYLE: "SET_STYLE",
   SET_FONT_FAMILY: "SET_FONT_FAMILY",
+  SET_FONT_SIZE: "SET_FONT_SIZE",
+  SET_SPACING: "SET_SPACING",
+  SET_ACCENT_COLOR: "SET_ACCENT_COLOR",
+  SET_HEADING_STYLE: "SET_HEADING_STYLE",
+  SET_SHOW_DIVIDERS: "SET_SHOW_DIVIDERS",
   SET_PAGE_SIZE: "SET_PAGE_SIZE",
   SET_IS_FRESHER: "SET_IS_FRESHER",
 
@@ -123,8 +142,37 @@ function reducer(state, action) {
     case A.SET_FORM_STEP:
       return { ...state, formStep: payload };
 
-    case A.SET_FONT_FAMILY:
-      return { ...state, fontFamily: payload };
+    case A.SET_STYLE: {
+      const nextStyle = { ...state.style, ...payload };
+      return {
+        ...state,
+        style: nextStyle,
+        accentColor: nextStyle.accentColor,
+        fontFamily: nextStyle.fontFamily,
+        fontSize: nextStyle.fontSize,
+        spacing: nextStyle.spacing,
+      };
+    }
+    case A.SET_FONT_FAMILY: {
+      const nextStyle = { ...state.style, fontFamily: payload };
+      return { ...state, fontFamily: payload, style: nextStyle };
+    }
+    case A.SET_FONT_SIZE: {
+      const nextStyle = { ...state.style, fontSize: payload };
+      return { ...state, fontSize: payload, style: nextStyle };
+    }
+    case A.SET_SPACING: {
+      const nextStyle = { ...state.style, spacing: payload };
+      return { ...state, spacing: payload, style: nextStyle };
+    }
+    case A.SET_HEADING_STYLE: {
+      const nextStyle = { ...state.style, headingStyle: payload };
+      return { ...state, style: nextStyle };
+    }
+    case A.SET_SHOW_DIVIDERS: {
+      const nextStyle = { ...state.style, showDividers: payload };
+      return { ...state, style: nextStyle };
+    }
     case A.SET_PAGE_SIZE:
       return { ...state, pageSize: payload };
     case A.SET_IS_FRESHER:
@@ -251,8 +299,10 @@ function reducer(state, action) {
 
     case A.SET_TEMPLATE:
       return { ...state, selectedTemplate: payload };
-    case A.SET_ACCENT_COLOR:
-      return { ...state, accentColor: payload };
+    case A.SET_ACCENT_COLOR: {
+      const nextStyle = { ...state.style, accentColor: payload, userChangedColor: true };
+      return { ...state, accentColor: payload, style: nextStyle };
+    }
     case A.SET_BUILDING:
       return { ...state, isBuilding: payload };
     case A.SET_BUILT:
@@ -265,8 +315,13 @@ function reducer(state, action) {
         wizardStep: state.wizardStep,
         formStep: state.formStep,
         selectedTemplate: state.selectedTemplate,
-        accentColor: state.accentColor,
-        fontFamily: state.fontFamily || DEFAULT_FONT,
+        style: {
+          ...state.style,
+        },
+        accentColor: state.style?.accentColor || state.accentColor,
+        fontFamily: state.style?.fontFamily || state.fontFamily || DEFAULT_FONT,
+        fontSize: state.style?.fontSize || state.fontSize || "medium",
+        spacing: state.style?.spacing || state.spacing || "normal",
         isBuilding: false,
         isBuilt: false,
       };
@@ -295,7 +350,34 @@ export function ResumeProvider({ children }) {
     }
   })();
 
-  const [state, dispatch] = useReducer(reducer, saved ? { ...defaultState, ...saved } : defaultState);
+  const initialState = (() => {
+    if (!saved) return defaultState;
+    const merged = { ...defaultState, ...saved };
+    const userAccent = saved.style?.accentColor || saved.accentColor || defaultState.style.accentColor;
+    const userFont = saved.style?.fontFamily || saved.fontFamily || defaultState.style.fontFamily;
+    const userFontSize = saved.style?.fontSize || saved.fontSize || defaultState.style.fontSize;
+    const userSpacing = saved.style?.spacing || saved.spacing || defaultState.style.spacing;
+    const userHeadingStyle = saved.style?.headingStyle || defaultState.style.headingStyle;
+    const userShowDividers = saved.style?.showDividers !== undefined ? saved.style.showDividers : defaultState.style.showDividers;
+    const userChangedColor = saved.style?.userChangedColor !== undefined ? saved.style.userChangedColor : (Boolean(saved.accentColor && saved.accentColor !== "#6366f1"));
+
+    merged.style = {
+      accentColor: userAccent,
+      fontFamily: userFont,
+      fontSize: userFontSize,
+      spacing: userSpacing,
+      headingStyle: userHeadingStyle,
+      showDividers: userShowDividers,
+      userChangedColor,
+    };
+    merged.accentColor = userAccent;
+    merged.fontFamily = userFont;
+    merged.fontSize = userFontSize;
+    merged.spacing = userSpacing;
+    return merged;
+  })();
+
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     try {

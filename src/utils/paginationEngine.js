@@ -110,13 +110,12 @@ export function computePagination(measurerEl, pageSize = "a4") {
   // Single page default if only 1 page
   const finalPages = pages.length > 0 ? pages : [blocks.map((b) => b.id)];
 
-  // Light content check (if single page and occupies less than 75% of printable height)
-  const isLightContent =
-    finalPages.length === 1 && totalHeight < availableHeight * 0.75;
+  // Keep isLightContent false so content flows consistently with fixed spacing
+  const isLightContent = false;
 
   return {
     pages: finalPages,
-    isLightContent,
+    isLightContent: false,
     dimensions: dim,
     pageCount: finalPages.length,
     totalHeight,

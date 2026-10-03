@@ -52,11 +52,18 @@ export function getLinkLabel(link) {
   }
 }
 
-export function getLinkIcon(link, size = 14) {
+export function getLinkIcon(link, size = 14, color) {
   const type = (link.type || "").toLowerCase();
-  if (type === "linkedin") return <Linkedin size={size} style={{ verticalAlign: "-2px", marginRight: "4px", display: "inline-block", flexShrink: 0 }} />;
-  if (type === "github") return <Github size={size} style={{ verticalAlign: "-2px", marginRight: "4px", display: "inline-block", flexShrink: 0 }} />;
-  return <Globe size={size} style={{ verticalAlign: "-2px", marginRight: "4px", display: "inline-block", flexShrink: 0 }} />;
+  const iconStyle = {
+    verticalAlign: "-2px",
+    marginRight: "4px",
+    display: "inline-block",
+    flexShrink: 0,
+    color: color || "var(--accent, currentColor)",
+  };
+  if (type === "linkedin") return <Linkedin size={size} style={iconStyle} />;
+  if (type === "github") return <Github size={size} style={iconStyle} />;
+  return <Globe size={size} style={iconStyle} />;
 }
 
 export function getValidLinks(links = []) {
@@ -115,11 +122,23 @@ export function ContactLine({
   className = "resume-contact-row",
   linkClassName = "link-label",
   textColor,
+  iconColor,
+  linkColor,
   showIcons = true,
   iconSize = 14,
 }) {
   const { email, phone, city } = personalInfo;
   const validLinks = getValidLinks(links);
+  const effectiveIconColor = iconColor || "var(--accent, currentColor)";
+  const effectiveLinkColor = linkColor || "var(--accent, inherit)";
+
+  const iconStyle = {
+    verticalAlign: "-2px",
+    marginRight: "4px",
+    display: "inline-block",
+    flexShrink: 0,
+    color: effectiveIconColor,
+  };
 
   const baseItems = [];
   if (email?.trim()) {
@@ -128,10 +147,10 @@ export function ContactLine({
       node: (
         <a
           href={`mailto:${email.trim()}`}
-          style={{ color: textColor || "inherit", display: "inline-flex", alignItems: "center" }}
+          style={{ color: effectiveLinkColor, display: "inline-flex", alignItems: "center" }}
         >
-          {showIcons && <Mail size={iconSize} style={{ verticalAlign: "-2px", marginRight: "4px", display: "inline-block", flexShrink: 0 }} />}
-          {email.trim()}
+          {showIcons && <Mail size={iconSize} style={iconStyle} />}
+          <span>{email.trim()}</span>
         </a>
       ),
     });
@@ -140,9 +159,9 @@ export function ContactLine({
     baseItems.push({
       key: "phone",
       node: (
-        <span style={{ display: "inline-flex", alignItems: "center" }}>
-          {showIcons && <Phone size={iconSize} style={{ verticalAlign: "-2px", marginRight: "4px", display: "inline-block", flexShrink: 0 }} />}
-          {phone.trim()}
+        <span style={{ color: textColor || "inherit", display: "inline-flex", alignItems: "center" }}>
+          {showIcons && <Phone size={iconSize} style={iconStyle} />}
+          <span>{phone.trim()}</span>
         </span>
       ),
     });
@@ -151,9 +170,9 @@ export function ContactLine({
     baseItems.push({
       key: "city",
       node: (
-        <span style={{ display: "inline-flex", alignItems: "center" }}>
-          {showIcons && <MapPin size={iconSize} style={{ verticalAlign: "-2px", marginRight: "4px", display: "inline-block", flexShrink: 0 }} />}
-          {city.trim()}
+        <span style={{ color: textColor || "inherit", display: "inline-flex", alignItems: "center" }}>
+          {showIcons && <MapPin size={iconSize} style={iconStyle} />}
+          <span>{city.trim()}</span>
         </span>
       ),
     });
@@ -169,10 +188,10 @@ export function ContactLine({
           target="_blank"
           rel="noopener noreferrer"
           className={linkClassName}
-          style={{ color: textColor || "inherit", display: "inline-flex", alignItems: "center" }}
+          style={{ color: effectiveLinkColor, display: "inline-flex", alignItems: "center" }}
         >
-          {showIcons && getLinkIcon(link, iconSize)}
-          {label}
+          {showIcons && getLinkIcon(link, iconSize, effectiveIconColor)}
+          <span>{label}</span>
         </a>
       ),
     });

@@ -21,6 +21,11 @@ export default function ClassicSingleColumn({
   const { personalInfo = {}, links = [], summary, education = [], skills = {}, projects = [], experience = [] } = data;
   const activeOptional = data.activeOptional || [];
 
+  const headingColor = accentColor || "var(--accent, #111111)";
+  const showDividers = data?.style?.showDividers !== false;
+  const headingTransform = data?.style?.headingStyle === "normal" ? "none" : "uppercase";
+  const dividerBorder = showDividers ? `1.5px solid ${headingColor}` : "none";
+
   return (
     <div
       className="resume-tpl tpl-classic"
@@ -38,7 +43,7 @@ export default function ClassicSingleColumn({
       {pageIndex === 0 && (
         <ResumeBlock id="header" type="header" pageBlocks={pageBlocks} style={{ marginBottom: "14px" }}>
           {personalInfo.fullName && (
-            <h1 className="rc-name" style={{ marginBottom: "2px", color: "#111111", fontSize: "20pt", fontWeight: 800 }}>
+            <h1 className="rc-name" style={{ marginBottom: "2px", color: headingColor, fontSize: "20pt", fontWeight: 800, textTransform: headingTransform }}>
               {personalInfo.fullName}
             </h1>
           )}
@@ -54,6 +59,8 @@ export default function ClassicSingleColumn({
             separator=" · "
             className="resume-contact-row rc-contact"
             textColor="#444444"
+            iconColor={headingColor}
+            linkColor={headingColor}
           />
         </ResumeBlock>
       )}
@@ -63,16 +70,15 @@ export default function ClassicSingleColumn({
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: isLightContent ? "24px" : "18px",
-          flexGrow: isLightContent ? 1 : "initial",
-          justifyContent: isLightContent ? "space-between" : "flex-start",
+          gap: "20px",
+          justifyContent: "flex-start",
         }}
       >
         {/* Professional Summary */}
         {hasSummary(data) && (
           <section>
             <ResumeBlock id="sec-summary-head" type="heading" headingFor="summary" pageBlocks={pageBlocks}>
-              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "5px", color: "#111111", borderBottom: "1px solid #111111", paddingBottom: "2px", textTransform: "uppercase", fontSize: "10.5pt", letterSpacing: "0.5px" }}>
+              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "5px", color: headingColor, borderBottom: dividerBorder, paddingBottom: "2px", textTransform: headingTransform, fontSize: "10.5pt", letterSpacing: "0.5px" }}>
                 Professional Summary
               </h2>
             </ResumeBlock>
@@ -88,7 +94,7 @@ export default function ClassicSingleColumn({
         {hasSkills(data) && (
           <section>
             <ResumeBlock id="sec-skills-head" type="heading" headingFor="skills" pageBlocks={pageBlocks}>
-              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "5px", color: "#111111", borderBottom: "1px solid #111111", paddingBottom: "2px", textTransform: "uppercase", fontSize: "10.5pt", letterSpacing: "0.5px" }}>
+              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "5px", color: headingColor, borderBottom: dividerBorder, paddingBottom: "2px", textTransform: headingTransform, fontSize: "10.5pt", letterSpacing: "0.5px" }}>
                 Technical Skills
               </h2>
             </ResumeBlock>
@@ -123,7 +129,7 @@ export default function ClassicSingleColumn({
         {hasExperience(data) && (
           <section>
             <ResumeBlock id="sec-experience-head" type="heading" headingFor="experience" pageBlocks={pageBlocks}>
-              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "8px", color: "#111111", borderBottom: "1px solid #111111", paddingBottom: "2px", textTransform: "uppercase", fontSize: "10.5pt", letterSpacing: "0.5px" }}>
+              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "8px", color: headingColor, borderBottom: dividerBorder, paddingBottom: "2px", textTransform: headingTransform, fontSize: "10.5pt", letterSpacing: "0.5px" }}>
                 Experience
               </h2>
             </ResumeBlock>
@@ -154,7 +160,7 @@ export default function ClassicSingleColumn({
         {hasProjects(data) && (
           <section>
             <ResumeBlock id="sec-projects-head" type="heading" headingFor="projects" pageBlocks={pageBlocks}>
-              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "8px", color: "#111111", borderBottom: "1px solid #111111", paddingBottom: "2px", textTransform: "uppercase", fontSize: "10.5pt", letterSpacing: "0.5px" }}>
+              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "8px", color: headingColor, borderBottom: dividerBorder, paddingBottom: "2px", textTransform: headingTransform, fontSize: "10.5pt", letterSpacing: "0.5px" }}>
                 Projects
               </h2>
             </ResumeBlock>
@@ -171,12 +177,12 @@ export default function ClassicSingleColumn({
                   </div>
                   <div style={{ fontSize: "8.5pt", display: "flex", gap: "8px" }}>
                     {proj.liveLink?.trim() && (
-                      <a href={proj.liveLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline", color: "#111111" }}>
+                      <a href={proj.liveLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline", color: headingColor }}>
                         Live Demo
                       </a>
                     )}
                     {proj.githubLink?.trim() && (
-                      <a href={proj.githubLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline", color: "#111111" }}>
+                      <a href={proj.githubLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline", color: headingColor }}>
                         GitHub
                       </a>
                     )}
@@ -200,7 +206,7 @@ export default function ClassicSingleColumn({
         {hasEducation(data) && (
           <section>
             <ResumeBlock id="sec-education-head" type="heading" headingFor="education" pageBlocks={pageBlocks}>
-              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "8px", color: "#111111", borderBottom: "1px solid #111111", paddingBottom: "2px", textTransform: "uppercase", fontSize: "10.5pt", letterSpacing: "0.5px" }}>
+              <h2 className="rc-section-title" style={{ marginTop: 0, marginBottom: "8px", color: headingColor, borderBottom: dividerBorder, paddingBottom: "2px", textTransform: headingTransform, fontSize: "10.5pt", letterSpacing: "0.5px" }}>
                 Education
               </h2>
             </ResumeBlock>
@@ -233,7 +239,7 @@ export default function ClassicSingleColumn({
             key={secId}
             sectionId={secId}
             data={data}
-            accentColor="#111111"
+            accentColor={headingColor}
             headingClass="rc-section-title"
             pageBlocks={pageBlocks}
           />

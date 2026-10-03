@@ -22,6 +22,11 @@ export default function ModernSplitTwoColumn({
   const activeOptional = data.activeOptional || [];
   const showPhoto = Boolean(data.showPhoto && data.photo);
 
+  const headingTransform = data?.style?.headingStyle === "normal" ? "none" : "uppercase";
+  const showDividers = data?.style?.showDividers !== false;
+  const sidebarDividerBorder = showDividers ? `1.5px solid ${accentColor}` : "none";
+  const mainDividerBorder = showDividers ? "1px solid #e2e8f0" : "none";
+
   return (
     <div
       className="resume-tpl tpl-modern"
@@ -67,7 +72,7 @@ export default function ModernSplitTwoColumn({
         {/* Sidebar Mini Header if Page 2+ */}
         {pageIndex > 0 ? (
           <div>
-            <span style={{ fontSize: "11pt", fontWeight: 800, color: accentColor }}>
+            <span style={{ fontSize: "11pt", fontWeight: 800, color: accentColor, textTransform: headingTransform }}>
               {personalInfo.fullName}
             </span>
             <p style={{ fontSize: "8pt", color: "#64748b" }}>Page {pageIndex + 1} of {totalPages}</p>
@@ -75,7 +80,7 @@ export default function ModernSplitTwoColumn({
         ) : (
           <div>
             {/* Contact Details in Sidebar */}
-            <h3 style={{ fontSize: "8.5pt", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: `1.5px solid ${accentColor}`, paddingBottom: "3px" }}>
+            <h3 style={{ fontSize: "8.5pt", fontWeight: 700, textTransform: headingTransform, letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: sidebarDividerBorder, paddingBottom: "3px" }}>
               Contact
             </h3>
             <ContactLine
@@ -84,6 +89,8 @@ export default function ModernSplitTwoColumn({
               separator="<br/>"
               className="resume-contact-column text-[8.5pt]"
               textColor="#334155"
+              iconColor={accentColor}
+              linkColor={accentColor}
               iconSize={13}
             />
           </div>
@@ -92,7 +99,7 @@ export default function ModernSplitTwoColumn({
         {/* Skills in Sidebar (Page 1) */}
         {pageIndex === 0 && hasSkills(data) && (
           <div>
-            <h3 style={{ fontSize: "8.5pt", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: `1.5px solid ${accentColor}`, paddingBottom: "3px" }}>
+            <h3 style={{ fontSize: "8.5pt", fontWeight: 700, textTransform: headingTransform, letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: sidebarDividerBorder, paddingBottom: "3px" }}>
               Expertise & Skills
             </h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "8.5pt" }}>
@@ -143,7 +150,7 @@ export default function ModernSplitTwoColumn({
         {/* Education in Sidebar (Page 1) */}
         {pageIndex === 0 && hasEducation(data) && (
           <div>
-            <h3 style={{ fontSize: "8.5pt", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: `1.5px solid ${accentColor}`, paddingBottom: "3px" }}>
+            <h3 style={{ fontSize: "8.5pt", fontWeight: 700, textTransform: headingTransform, letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: sidebarDividerBorder, paddingBottom: "3px" }}>
               Education
             </h3>
             {education.map((edu, idx) => (
@@ -166,16 +173,15 @@ export default function ModernSplitTwoColumn({
           padding: "28px 28px",
           display: "flex",
           flexDirection: "column",
-          gap: isLightContent ? "24px" : "18px",
-          justifyContent: isLightContent ? "space-between" : "flex-start",
-          flexGrow: 1,
+          gap: "20px",
+          justifyContent: "flex-start",
           boxSizing: "border-box",
         }}
       >
         {/* Name and headline (Page 1 only) */}
         {pageIndex === 0 && (
           <ResumeBlock id="header" type="header" pageBlocks={pageBlocks} style={{ marginBottom: "4px" }}>
-            <h1 style={{ fontSize: "22pt", fontWeight: 900, color: accentColor, margin: 0, letterSpacing: "-0.5px" }}>
+            <h1 style={{ fontSize: "22pt", fontWeight: 900, color: accentColor, margin: 0, letterSpacing: "-0.5px", textTransform: headingTransform }}>
               {personalInfo.fullName || "Your Name"}
             </h1>
             {personalInfo.headline && (
@@ -190,7 +196,7 @@ export default function ModernSplitTwoColumn({
         {hasSummary(data) && (
           <section>
             <ResumeBlock id="sec-summary-head" type="heading" headingFor="summary" pageBlocks={pageBlocks}>
-              <h2 style={{ fontSize: "10pt", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: accentColor, marginBottom: "6px", borderBottom: "1px solid #e2e8f0", paddingBottom: "2px" }}>
+              <h2 style={{ fontSize: "10pt", fontWeight: 700, textTransform: headingTransform, letterSpacing: "1px", color: accentColor, marginBottom: "6px", borderBottom: mainDividerBorder, paddingBottom: "2px" }}>
                 Executive Summary
               </h2>
             </ResumeBlock>
@@ -206,7 +212,7 @@ export default function ModernSplitTwoColumn({
         {hasExperience(data) && (
           <section>
             <ResumeBlock id="sec-experience-head" type="heading" headingFor="experience" pageBlocks={pageBlocks}>
-              <h2 style={{ fontSize: "10pt", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: "1px solid #e2e8f0", paddingBottom: "2px" }}>
+              <h2 style={{ fontSize: "10pt", fontWeight: 700, textTransform: headingTransform, letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: mainDividerBorder, paddingBottom: "2px" }}>
                 Work Experience
               </h2>
             </ResumeBlock>
@@ -235,7 +241,7 @@ export default function ModernSplitTwoColumn({
         {hasProjects(data) && (
           <section>
             <ResumeBlock id="sec-projects-head" type="heading" headingFor="projects" pageBlocks={pageBlocks}>
-              <h2 style={{ fontSize: "10pt", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: "1px solid #e2e8f0", paddingBottom: "2px" }}>
+              <h2 style={{ fontSize: "10pt", fontWeight: 700, textTransform: headingTransform, letterSpacing: "1px", color: accentColor, marginBottom: "8px", borderBottom: mainDividerBorder, paddingBottom: "2px" }}>
                 Key Projects
               </h2>
             </ResumeBlock>
